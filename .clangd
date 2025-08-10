@@ -1,0 +1,6 @@
+CompileFlags:
+  # Point to the active PlatformIO env’s compile_commands.json
+  CompilationDatabase: .pio/build/uno
+
+Diagnostics:
+  ClangTidy: true
