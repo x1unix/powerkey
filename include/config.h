@@ -17,15 +17,15 @@
 // Pin to put device into setup mode.
 //
 // Setup mode is used to set keyboard strokes to send on key press.
-#define PIN_SETUP_MODE PIN4
+#define PIN_BTN_SETUP_MODE PIN4
 
 // Pin to handle the master key that sends keystrokes.
-#define PIN_MASTER_KEY 8
+#define PIN_BTN_MASTER_KEY 8
 
 // Pin to drive LED active during master key mode.
-#define PIN_LED_MASTER 14
+#define PIN_LED_MASTER PIN5
 
 // Pin to drive LED active during setup mode.
-#define PIN_LED_SETUP 15
+#define PIN_LED_SETUP PIN6
 
 #endif
