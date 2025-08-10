@@ -3,3 +3,7 @@
 .pio
 .DS_Store
 
+# Cache & clangd
+.cache
+compile_commands.json
+
