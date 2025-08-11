@@ -19,11 +19,11 @@ public:
   virtual ActionType tick(BoardState &state) = 0;
 
   /**
-   * Disposes current saga.
+   * DIsposes saga when state transitions to a next saga.
    *
    * TODO: should this be a destructor instead?
    */
-  virtual void dispose() = 0;
+  virtual void leave() = 0;
 };
 
 /**

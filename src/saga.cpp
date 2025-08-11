@@ -7,14 +7,14 @@
 
 class NoOpSaga : public Saga {
   void enter(BoardState& state) override {}
-  void dispose() override {}
+  void leave() override {}
   ActionType tick(BoardState& state) override {
     return ActionType::EMPTY;
   }
 };
 
 class BootSaga : public Saga {
-  void dispose() override {}
+  void leave() override {}
   void enter(BoardState& state) override {
     if (state.isDisabled) {
       return;
@@ -39,7 +39,7 @@ class BootSaga : public Saga {
 
 class SetupSaga : public Saga {
   void enter(BoardState& state) override {}
-  void dispose() override {}
+  void leave() override {}
   ActionType tick(BoardState& state) override {
     return ActionType::EMPTY;
   }
@@ -47,7 +47,7 @@ class SetupSaga : public Saga {
 
 class KeyboardSaga : public Saga {
   void enter(BoardState& state) override {}
-  void dispose() override {}
+  void leave() override {}
   ActionType tick(BoardState& state) override {
     return ActionType::EMPTY;
   }
@@ -88,7 +88,7 @@ Saga* nextSaga(ActionType action, BoardState& state, Saga* prevSaga) {
   }
 
   if (prevSaga != nullptr) {
-    prevSaga->dispose();
+    prevSaga->leave();
   }
 
   Saga* nextSaga = sagaFromActionType(action);
