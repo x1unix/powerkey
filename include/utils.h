@@ -1,5 +1,5 @@
-#ifndef _H_MASTERKEY
-#define _H_MASTERKEY
+#ifndef _H_UTILS
+#define _H_UTILS
 #include <Arduino.h>
 
 // Password length offset address in EEPROM.
@@ -10,12 +10,7 @@
 // Password comes right after length value.
 #define EEPROM_PASSWD_DATA_OFFSET sizeof(uint16_t)
 
-enum BoardState {
-  DISABLED = 0,
-  PASSWD_EMPTY = 1
-};
-
-void boostrap();
 bool isBoardDisabled();
+void setupPins();
 
 #endif
