@@ -37,10 +37,23 @@ class BootSaga : public Saga {
   }
 };
 
+#define SETUP_BLINK_INTERVAL 100
+
 class SetupSaga : public Saga {
-  void enter(BoardState& state) override {}
-  void leave(BoardState& state) override {}
+private:
+  unsigned long prevMillis = 0;
+public:
+  void enter(BoardState& state) override {
+    prevMillis = millis();
+    digitalWrite(PIN_LED_SETUP, HIGH);
+  }
+
+  void leave(BoardState& state) override {
+    digitalWrite(PIN_LED_SETUP, LOW);
+  }
+
   ActionType tick(BoardState& state) override {
+    unsigned long now = millis();
     return ActionType::EMPTY;
   }
 };
