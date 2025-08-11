@@ -87,6 +87,10 @@ Saga* nextSaga(ActionType action, BoardState& state, Saga* prevSaga) {
     return prevSaga;
   }
 
+  if (prevSaga != nullptr) {
+    prevSaga->dispose();
+  }
+
   Saga* nextSaga = sagaFromActionType(action);
   state.prevAction = state.currentAction;
   state.currentAction = action;
