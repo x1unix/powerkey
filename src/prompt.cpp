@@ -1,8 +1,6 @@
 #include "prompt.h"
 #include "USBAPI.h"
 
-#define UINT16_MAX 65535
-
 PromptReader::PromptReader(uint16_t maxLen) {
   this->m_cap = 0;
   this->m_len = maxLen;

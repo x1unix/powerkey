@@ -3,6 +3,10 @@
 #define _H_PROMPT
 #include <Arduino.h>
 
+#ifndef UINT16_MAX
+#define UINT16_MAX 65535
+#endif
+
 struct PromptResult {
   uint16_t len;
   char *data;
