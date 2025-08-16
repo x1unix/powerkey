@@ -25,6 +25,7 @@ struct BoardState {
   bool isDisabled;
   bool isInitialized;
   uint16_t pwdLen;
+  char* pwdData;
   ButtonsState buttons;
 };
 
