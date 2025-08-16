@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <EEPROM.h>
 #include "config.h"
 #include "utils.h"
 #include "state.h"
@@ -43,6 +42,10 @@ class BootSaga : public Saga {
 #define SETUP_BLINK_INTERVAL 300
 
 class SetupSaga : public Saga {
+public:
+  SetupSaga() : m_reader(MAX_PASSWD_LEN) {
+  }
+
 private:
   PromptReader m_reader;
   unsigned long m_prevMillis = 0;

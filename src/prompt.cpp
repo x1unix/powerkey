@@ -132,6 +132,8 @@ bool PromptReader::readPassword() {
     case PromptReadStage::FINISH:
       return false;
   }
+
+  return false;
 }
 
 PromptResult PromptReader::getResult() {
