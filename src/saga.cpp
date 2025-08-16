@@ -41,11 +41,26 @@ class BootSaga : public Saga {
 
 class SetupSaga : public Saga {
 private:
-  unsigned long prevMillis = 0;
+  unsigned long m_prevMillis = 0;
+  bool m_ledEnabled = false;
+
+  void updateLedState(bool state) {
+    m_prevMillis = millis();
+    digitalWrite(PIN_LED_SETUP, state ? HIGH : LOW);
+    m_ledEnabled = state;
+  }
+
+  void blinkLed() {
+    unsigned long now = millis();
+    if (now - m_prevMillis < SETUP_BLINK_INTERVAL) {
+      return;
+    }
+
+    updateLedState(!m_ledEnabled);
+  }
 public:
   void enter(BoardState& state) override {
-    prevMillis = millis();
-    digitalWrite(PIN_LED_SETUP, HIGH);
+    updateLedState(true);
   }
 
   void leave(BoardState& state) override {
@@ -53,7 +68,7 @@ public:
   }
 
   ActionType tick(BoardState& state) override {
-    unsigned long now = millis();
+    blinkLed();
     return ActionType::EMPTY;
   }
 };
@@ -67,11 +82,15 @@ class KeyboardSaga : public Saga {
 };
 
 BoardState getInitialState() {
+  // Arduino's compiler doesn't support designated initializers :(
   return BoardState{
-    .isDisabled = isBoardDisabled(),
-    .buttons = ButtonsState{
-      .masterKey = TcBUTTON(PIN_BTN_MASTER_KEY),
-      .setup = TcBUTTON(PIN_BTN_SETUP_MODE) }
+    ActionType::EMPTY,
+    ActionType::EMPTY,
+    isBoardDisabled(),
+    false,
+    false,
+    { TcBUTTON(PIN_BTN_MASTER_KEY),
+      TcBUTTON(PIN_BTN_SETUP_MODE) }
   };
 }
 
@@ -81,9 +100,6 @@ Saga* firstSaga(BoardState& state) {
 
 Saga* sagaFromActionType(ActionType action) {
   switch (action) {
-    case ActionType::EMPTY:
-      // TODO: add panic saga
-      return nullptr;
     case ActionType::BOOT:
       return new BootSaga();
     case ActionType::KEYBOARD_IDLE:
@@ -92,6 +108,9 @@ Saga* sagaFromActionType(ActionType action) {
       return new SetupSaga();
     case ActionType::DISABLE_BOARD:
       return new NoOpSaga();
+    default:
+      // TODO: add panic saga
+      return nullptr;
   }
 }
 
