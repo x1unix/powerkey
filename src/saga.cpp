@@ -6,7 +6,9 @@
 #include "saga.h"
 
 class NoOpSaga : public Saga {
-  void enter(BoardState& state) override {}
+  void enter(BoardState& state) override {
+    digitalWrite(PIN_LED_SETUP, HIGH);
+  }
   void leave(BoardState& state) override {}
   ActionType tick(BoardState& state) override {
     return ActionType::EMPTY;
@@ -37,7 +39,7 @@ class BootSaga : public Saga {
   }
 };
 
-#define SETUP_BLINK_INTERVAL 100
+#define SETUP_BLINK_INTERVAL 300
 
 class SetupSaga : public Saga {
 private:
@@ -60,6 +62,7 @@ private:
   }
 public:
   void enter(BoardState& state) override {
+    Serial.begin(9600);
     updateLedState(true);
   }
 
@@ -125,6 +128,8 @@ Saga* nextSaga(ActionType action, BoardState& state, Saga* prevSaga) {
     prevSaga->leave(state);
   }
 
+  Serial.print("nextSaga: ");
+  Serial.println(action);
   Saga* nextSaga = sagaFromActionType(action);
   nextSaga->enter(state);
   return nextSaga;
