@@ -199,6 +199,8 @@ Saga* nextSaga(ActionType action, BoardState& state, Saga* prevSaga) {
   state.currentAction = action;
   if (prevSaga != nullptr) {
     prevSaga->leave(state);
+    delete prevSaga;
+    prevSaga = nullptr;
   }
 
   Serial.print("nextSaga: ");

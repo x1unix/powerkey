@@ -8,6 +8,9 @@
  */
 class Saga {
 public:
+  /**
+   * Called once when state enters to a new saga.
+   */
   virtual void enter(BoardState &state) = 0;
 
   /**
@@ -24,6 +27,8 @@ public:
    * Next action type for a saga is available at [BoardState.currentAction].
    */
   virtual void leave(BoardState &state) = 0;
+
+  virtual ~Saga() = default;
 };
 
 /**
