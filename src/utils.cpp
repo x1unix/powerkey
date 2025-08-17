@@ -34,13 +34,15 @@ uint16_t getPasswdLen() {
 
 void savePasswd(uint16_t len, char* data) {
   // Write magic
-  EEPROM.put(EEPROM_MAGIC_OFFSET, EEPROM_MAGIC);
+  if (!isMagicPresent()) {
+    EEPROM.put(EEPROM_MAGIC_OFFSET, EEPROM_MAGIC);
+  }
 
   // Commit len
   EEPROM.put(EEPROM_PASSWD_LEN_OFFSET, len);
 
   for (uint16_t i = 0; i < len; i++) {
-    EEPROM.write(EEPROM_PASSWD_DATA_OFFSET + i, data[i]);
+    EEPROM.update(EEPROM_PASSWD_DATA_OFFSET + i, data[i]);
   }
 }
 
@@ -55,7 +57,7 @@ void readPasswdStr(uint16_t len, char* dst) {
 }
 
 void wipePasswd() {
-  for (uint8_t i = EEPROM_PASSWD_OFFSET; i < EEPROM_PASSWD_DATA_OFFSET + 1; i++) {
-    EEPROM.write(i, 0xFF);
+  for (uint16_t i = EEPROM_PASSWD_OFFSET; i < EEPROM_PASSWD_DATA_OFFSET + 1; i++) {
+    EEPROM.update(i, 0xFF);
   }
 }

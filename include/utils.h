@@ -7,7 +7,7 @@
 // Password struct memory layout looks like this:
 //
 //  [magic:2 bytes][len:2 bytes][data...]
-#define EEPROM_PASSWD_OFFSET 0.
+#define EEPROM_PASSWD_OFFSET 0
 
 #define EEPROM_MAGIC 0xDEAD
 #define EEPROM_MAGIC_OFFSET EEPROM_PASSWD_OFFSET
