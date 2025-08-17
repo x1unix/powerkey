@@ -12,7 +12,6 @@
 
 // Uncomment this to enable debug logging
 //#define DEBUG
-#define DEBUG
 
 // Maximum password length in ASCII chars.
 //
