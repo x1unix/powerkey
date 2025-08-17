@@ -81,14 +81,16 @@ bool PromptReader::tryReadLen() {
     uint8_t b = Serial.read();
     if (isBreakChar(b)) {
       if (m_cap == 0) {
-        Serial.println("ERR: Empty cap");
+        Serial.println("Err: Empty cap");
         reset();
         return false;
       }
 
       // Stop read size
+#ifdef DEBUG
       Serial.print("OK: len=");
       Serial.println(m_cap);
+#endif
       m_data = new uint8_t[m_cap];
       m_stage = PromptReadStage::WAIT_STR;
       return true;
@@ -130,8 +132,10 @@ bool PromptReader::tryReadChar() {
         continue;
       }
 
+      Serial.print("OK (len=");
+      Serial.print(m_len);
+      Serial.println(")");
 #ifdef DEBUG
-      Serial.print("OK: val=");
       Serial.write(m_data, m_len);
       Serial.println();
 #endif
