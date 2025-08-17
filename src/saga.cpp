@@ -137,6 +137,13 @@ class KeyboardSaga : public Saga {
     state.pwdData = new char[state.pwdLen];
     readPasswdStr(state.pwdLen, state.pwdData);
     digitalWrite(PIN_LED_MASTER, HIGH);
+#ifdef DEBUG
+    Serial.print("KeyboardSaga: load passwd: len=");
+    Serial.print(state.pwdLen);
+    Serial.print("; data=");
+    Serial.write(state.pwdData, state.pwdLen);
+    Serial.println();
+#endif
   }
 
   void leave(BoardState& state) override {
@@ -154,9 +161,11 @@ class KeyboardSaga : public Saga {
     }
 
     if (state.buttons.masterKey.isPressed()) {
+#ifdef DEBUG
       Serial.print("PWD: ");
       Serial.write(state.pwdData, state.pwdLen);
       Serial.println();
+#endif
     }
     return ActionType::EMPTY;
   }
