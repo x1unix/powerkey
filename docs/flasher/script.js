@@ -125,7 +125,13 @@ const parseNumRegex = (str, regex) => {
 }
 
 const validateResponse = (str) => str.match(CONFIRM_RSP_REGEX);
-const parseResponse = (str) => parseNumRegex(str, CONFIRM_RSP_REGEX);
+const parseResponse = (str) => {
+  if (str.startsWith("Err:")) {
+    throw new Error("Device returned an error");
+  }
+
+  return parseNumRegex(str, CONFIRM_RSP_REGEX);
+}
 
 const validatePrompt = (str) => str.match(PROMPT_REQ_REGEX);
 const parsePrompt = (str) => parseNumRegex(str, PROMPT_REQ_REGEX);
