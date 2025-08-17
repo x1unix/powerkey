@@ -1,6 +1,7 @@
 'use strict';
 
 const PROMPT_REQ_REGEX = /^NEW PASSWD\? \(maxlen: ([\d]+)\)/;
+const CONFIRM_RSP_REGEX = /^OK \(len=([\d]+)\)$/;
 
 const sceneNames = ['start', 'progress', 'prompt', 'error', 'finish'];
 
@@ -65,6 +66,17 @@ function setErrorMsg(msg) {
   setScene(scenes.error);
 }
 
+function setProgress(msg, cancellable = false) {
+  progressMsg.innerText = msg;
+  if (cancellable) {
+    cancelBtn.classList.remove("hidden");
+  } else {
+    cancelBtn.classList.add("hidden");
+  }
+
+  setScene(scenes.progress);
+}
+
 function init() {
   if (!("serial" in navigator)) {
     setErrorMsg("This browser is not supported. Try using Google Chrome or other Chrome-based browser.");
@@ -103,17 +115,22 @@ function resetPort() {
   state.port = null;
 }
 
-const validatePrompt = (str) => str.match(PROMPT_REQ_REGEX);
-function parsePrompt(str) {
-  const m = PROMPT_REQ_REGEX.exec(str)
+const parseNumRegex = (str, regex) => {
+  const m = regex.exec(str)
   if (!m) {
     return { ok: false };
   }
 
-  return { maxLen: parseInt(m[1]), ok: true };
+  return { val: parseInt(m[1]), ok: true };
 }
 
-async function waitForPrompt(port) {
+const validateResponse = (str) => str.match(CONFIRM_RSP_REGEX);
+const parseResponse = (str) => parseNumRegex(str, CONFIRM_RSP_REGEX);
+
+const validatePrompt = (str) => str.match(PROMPT_REQ_REGEX);
+const parsePrompt = (str) => parseNumRegex(str, PROMPT_REQ_REGEX);
+
+async function readPortUntil(port, cb) {
   const reader = port.readable.getReader();
   let buff = '';
   while (port && port.readable) {
@@ -122,7 +139,7 @@ async function waitForPrompt(port) {
     const dec = new TextDecoder();
     buff += dec.decode(value).trim();
 
-    if (validatePrompt(buff)) {
+    if (cb(buff)) {
       break;
     }
 
@@ -136,6 +153,9 @@ async function waitForPrompt(port) {
   return buff;
 }
 
+const waitForPrompt = async (port) => await readPortUntil(port, validatePrompt);
+const waitForResponse = async (port) => await readPortUntil(port, validateResponse);
+
 async function writePassword(value) {
   if (!value.length || !state.port) {
     return
@@ -147,8 +167,7 @@ async function writePassword(value) {
   }
 
   try {
-    progressMsg.innerText = "Writing...";
-    setScene(scenes.progress);
+    setProgress("Writing...");
     const enc = new TextEncoder();
     const data = enc.encode(`${value.length}\r${value}\r`);
 
@@ -156,6 +175,18 @@ async function writePassword(value) {
     await writer.write(data);
     await writer.close();
     writer.releaseLock();
+
+    setProgress("Waiting for device response...");
+    const rsp = await waitForResponse(state.port);
+    const { ok, val } = parseResponse(rsp);
+    if (!ok) {
+      throw new Error("Device didn't acknowledge. Please try again.");
+    }
+
+    if (val !== value.length) {
+      throw new Error(`Device acknowledged password length doesn't match (want: ${value.length}, got: ${val})`);
+    }
+
     setScene(scenes.finish);
     setTimeout(() => setScene(scenes.start), 3000);
   } finally {
@@ -164,8 +195,7 @@ async function writePassword(value) {
 }
 
 async function start() {
-  progressMsg.innerText = "Waiting for keyboard...";
-  setScene(scenes.progress);
+  setProgress("Waiting for keyboard...");
 
   // On Linux, device descriptors aren't available for some reason.
   const opts = isLinux ? undefined : {
@@ -182,21 +212,20 @@ async function start() {
   })
 
   console.clear();
-  progressMsg.innerText = "Waiting for handshake...";
+  setProgress("Waiting for handshake...");
   const buff = await waitForPrompt(port);
   console.log('REMOTE: ', buff);
-  const { ok, maxLen } = parsePrompt(buff);
+  const { ok, val } = parsePrompt(buff);
   if (!ok) {
-    errMsg.innerText = "Bad handshake response from device. Please try again";
-    setScene(scenes.error);
+    setErrorMsg("Bad handshake response from device. Please try again");
     resetPort();
     return;
   }
 
-  console.log('maxLen: ', maxLen);
-  state.maxLen = maxLen;
+  console.log('maxLen: ', val);
+  state.maxLen = val;
   state.isWriting = true;
-  inputText.setAttribute("maxlength", maxLen);
+  inputText.setAttribute("maxlength", state.maxLen);
   setScene(scenes.prompt);
 }
 
