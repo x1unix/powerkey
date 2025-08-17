@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Keyboard.h>
 #include "logger.h"
 #include "config.h"
 #include "utils.h"
@@ -129,15 +130,19 @@ public:
 
 class KeyboardSaga : public Saga {
   void enter(BoardState& state) override {
-    // TODO: init kbd
+#ifdef DEBUG
     Serial.begin(9600);
+#else
+    Keyboard.begin();
+#endif
+
     state.pwdLen = getPasswdLen();
 
     if (state.pwdLen == 0) {
       return;
     }
 
-    state.pwdData = new char[state.pwdLen];
+    state.pwdData = new uint8_t[state.pwdLen];
     readPasswdStr(state.pwdLen, state.pwdData);
     digitalWrite(PIN_LED_MASTER, HIGH);
 #ifdef DEBUG
@@ -168,6 +173,8 @@ class KeyboardSaga : public Saga {
       Serial.print("PWD: ");
       Serial.write(state.pwdData, state.pwdLen);
       Serial.println();
+#else
+      Keyboard.write((uint8_t*)state.pwdData, (size_t)state.pwdLen);
 #endif
     }
     return ActionType::EMPTY;
