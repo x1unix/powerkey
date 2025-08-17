@@ -1,0 +1,116 @@
+html {
+  --color-bg0: #8d8d8d;
+  --color-bg1: #ccc;
+  --color-bg2: #fff;
+  --color-fg-primary: #000;
+  --color-border: #333;
+}
+
+[hidden] {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --color-bg0: #000;
+    --color-bg1: #222;
+    --color-bg2: #666;
+    --color-fg-primary: #ccc;
+    --color-border: #444;
+  }
+}
+
+@font-face {
+  font-family: "04B_30";
+  src:
+    local("04B_30"),
+    url("fonts/04B.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "FixedsysExcelsior";
+  src:
+    local("Fixedsys Excelsior"),
+    url("fonts/FSEX302.ttf") format("truetype");
+}
+
+body {
+  background: var(--color-bg0);
+  color: var(--color-fg-primary);
+  font: 12pt FixedsysExcelsior, monospace;
+  font-display: swap;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container kbd {
+  color: #0000ff;
+  font: inherit;
+  font-display: swap;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+}
+
+.btn {
+  font: 12pt FixedsysExcelsior, monospace;
+  font-display: swap;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  background: var(--color-bg1);
+  color: var(--color-fg-primary);
+  border-radius: 0;
+  border: 2px solid var(--color-border);
+  padding: 2pt 4pt;
+}
+
+.input {
+  font: 12pt FixedsysExcelsior, monospace;
+  font-display: swap;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  background: var(--color-bg1);
+  color: var(--color-fg-primary);
+  border-radius: 0;
+  border: 2px solid var(--color-border);
+  padding: 2pt 4pt;
+}
+
+.input:focus {
+  background: var(--color-bg2);
+  outline: 0;
+}
+
+.header {
+  text-align: center;
+  font-family: '04B_30';
+  padding: 32px;
+}
+
+.container .title {
+   font-size: 32pt;
+}
+
+.title .power {
+  color: green;
+}
+
+.title .key {
+  color: #800000;
+}
+
+.content {
+  text-align: center;
+}
+
+.content .descr {
+  margin: 18pt 0;
+}

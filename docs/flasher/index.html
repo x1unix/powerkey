@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PowerKey Programmer</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="24x24" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+    <link rel="stylesheet" href="style.css" />
+    <meta name="darkreader-lock" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="title">
+          <span class="power">Power</span><span class="key">Key</span><span> Programmer</span>
+        </div>
+      </header>
+      <div class="content" id="content-start" hidden>
+        <p class="descr">Press a reset button on your PowerKey and click <kbd>"Start"</kbd> when ready</p>
+        <button type="button" class="btn">Start</button>
+      </div>
+      <div class="content" id="content-prompt">
+        <p class="descr">Enter a new password to remember and press <kbd>Enter</kbd></p>
+        <form id="pwdForm">
+          <p>
+            <input type="password" id="pwd" class="input" autocomplete="off" maxlength="240" />
+          </p>
+          <p>
+            <button class="btn" type="submit">Save</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
