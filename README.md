@@ -22,6 +22,6 @@ See [include/config.h](include/config.h) for pinout configuration and firmware o
 
 ### Programming
 
-Use [PowerKey Programmer](https://x1unix.github.io/powerkey/) web tool to re-program a device and update stored password.
+Use [PowerKey Programmer](https://x1unix.github.io/powerkey/flasher) web tool to re-program a device and update stored password.
 
 
