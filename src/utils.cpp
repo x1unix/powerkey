@@ -24,8 +24,7 @@ uint16_t getPasswdLen() {
 
 void savePasswd(uint16_t len, char* data) {
   // Commit len
-  EEPROM.write(EEPROM_PASSWD_LEN_OFFSET, len & 0xFF);
-  EEPROM.write(EEPROM_PASSWD_LEN_OFFSET + 1, (len >> 8) & 0xFF);
+  EEPROM.put(EEPROM_PASSWD_LEN_OFFSET, len);
 
   for (uint16_t i = 0; i < len; i++) {
     EEPROM.write(EEPROM_PASSWD_DATA_OFFSET + i, data[i]);
