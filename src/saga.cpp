@@ -8,6 +8,8 @@
 
 class NoOpSaga : public Saga {
   void enter(BoardState& state) override {
+    pinMode(PIN_GUARD, OUTPUT);  // To keep lights on.
+
     wipePasswd();
     digitalWrite(PIN_LED_SETUP, HIGH);
   }
