@@ -173,6 +173,7 @@ async function writePassword(value) {
   }
 
   try {
+    inputText.value = "";
     setProgress("Writing...");
     const enc = new TextEncoder();
     const data = enc.encode(`${value.length}\r${value}\r`);
