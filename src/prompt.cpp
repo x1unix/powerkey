@@ -89,7 +89,7 @@ bool PromptReader::tryReadLen() {
       // Stop read size
       Serial.print("OK: len=");
       Serial.println(m_cap);
-      m_data = new char[m_cap];
+      m_data = new uint8_t[m_cap];
       m_stage = PromptReadStage::WAIT_STR;
       return true;
     }

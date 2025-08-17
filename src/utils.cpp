@@ -32,7 +32,7 @@ uint16_t getPasswdLen() {
   return val;
 }
 
-void savePasswd(uint16_t len, char* data) {
+void savePasswd(uint16_t len, uint8_t* data) {
   // Write magic
   if (!isMagicPresent()) {
     EEPROM.put(EEPROM_MAGIC_OFFSET, EEPROM_MAGIC);
@@ -46,7 +46,7 @@ void savePasswd(uint16_t len, char* data) {
   }
 }
 
-void readPasswdStr(uint16_t len, char* dst) {
+void readPasswdStr(uint16_t len, uint8_t* dst) {
   if (len == 0) {
     return;
   }

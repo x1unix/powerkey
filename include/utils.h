@@ -17,8 +17,8 @@
 bool isBoardDisabled();
 void setupPins();
 uint16_t getPasswdLen();
-void readPasswdStr(uint16_t len, char* dst);
-void savePasswd(uint16_t len, char* data);
+void readPasswdStr(uint16_t len, uint8_t* dst);
+void savePasswd(uint16_t len, uint8_t* data);
 void wipePasswd();
 
 #endif

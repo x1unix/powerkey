@@ -9,7 +9,7 @@
 
 struct PromptResult {
   uint16_t len;
-  char *data;
+  uint8_t *data;
 };
 
 enum PromptReadStage {
@@ -33,7 +33,7 @@ private:
   uint16_t m_cap;
   uint16_t m_len;
   uint16_t m_maxLen;
-  char *m_data;
+  uint8_t *m_data;
 
   bool readStrChar(uint8_t ch);
   bool readLenChar(uint8_t ch);
