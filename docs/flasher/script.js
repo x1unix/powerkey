@@ -110,8 +110,13 @@ function setScene(id) {
   state.scene = id;
 }
 
-function resetPort() {
-  void state.port.close();
+async function resetPort() {
+  try {
+    await state.port.close();
+  } catch (err) {
+    console.error(err);
+  }
+
   state.port = null;
 }
 
@@ -168,7 +173,7 @@ async function writePassword(value) {
   }
 
   if (value.length > state.maxLen) {
-    resetPort();
+    await resetPort();
     throw new Error(`Password is too long (max: ${maxLen})`);
   }
 
@@ -185,6 +190,7 @@ async function writePassword(value) {
 
     setProgress("Waiting for device response...");
     const rsp = await waitForResponse(state.port);
+    console.log("REMOTE: ", rsp);
     const { ok, val } = parseResponse(rsp);
     if (!ok) {
       throw new Error("Device didn't acknowledge. Please try again.");
@@ -197,7 +203,7 @@ async function writePassword(value) {
     setScene(scenes.finish);
     setTimeout(() => setScene(scenes.start), 3000);
   } finally {
-    resetPort();
+    await resetPort();
   }
 }
 
@@ -225,7 +231,7 @@ async function start() {
   const { ok, val } = parsePrompt(buff);
   if (!ok) {
     setErrorMsg("Bad handshake response from device. Please try again");
-    resetPort();
+    await resetPort();
     return;
   }
 
@@ -238,7 +244,7 @@ async function start() {
 
 function cancel() {
   if (state.isWriting) {
-    resetPort();
+    void resetPort();
   }
 
   setScene(scenes.start);
