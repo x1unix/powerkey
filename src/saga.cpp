@@ -155,8 +155,12 @@ class KeyboardSaga : public Saga {
   }
 
   void leave(BoardState& state) override {
-    Serial.end();
     digitalWrite(PIN_LED_MASTER, LOW);
+#ifdef DEBUG
+    Serial.end();
+#else
+    Keyboard.end();
+#endif
   }
 
   ActionType tick(BoardState& state) override {
@@ -174,7 +178,7 @@ class KeyboardSaga : public Saga {
       Serial.write(state.pwdData, state.pwdLen);
       Serial.println();
 #else
-      Keyboard.write((uint8_t*)state.pwdData, (size_t)state.pwdLen);
+      Keyboard.write(state.pwdData, (size_t)state.pwdLen);
 #endif
     }
     return ActionType::EMPTY;
