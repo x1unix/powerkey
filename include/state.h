@@ -1,7 +1,7 @@
 #ifndef _H_STATE
 #define _H_STATE
 #include <Arduino.h>
-#include <TcBUTTON.h>
+#include "button.h"
 
 enum ActionType {
   EMPTY = 0,
@@ -12,8 +12,8 @@ enum ActionType {
 };
 
 struct ButtonsState {
-  TcBUTTON masterKey;
-  TcBUTTON setup;
+  Button masterKey;
+  Button setup;
 };
 
 /**

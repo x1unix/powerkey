@@ -115,7 +115,7 @@ public:
 
   ActionType tick(BoardState& state) override {
     blinkLed();
-    if (state.buttons.setup.isPressed()) {
+    if (state.buttons.setup.isActivated()) {
       // Abort on button press
       return state.prevAction;
     }
@@ -156,11 +156,11 @@ class KeyboardSaga : public Saga {
       return ActionType::SETUP_ENTER;
     }
 
-    if (state.buttons.setup.isPressed()) {
+    if (state.buttons.setup.isActivated()) {
       return ActionType::SETUP_ENTER;
     }
 
-    if (state.buttons.masterKey.isPressed()) {
+    if (state.buttons.masterKey.isActivated()) {
 #ifdef DEBUG
       Serial.print("PWD: ");
       Serial.write(state.pwdData, state.pwdLen);
@@ -180,8 +180,8 @@ BoardState getInitialState() {
     false,
     false,
     nullptr,
-    { TcBUTTON(PIN_BTN_MASTER_KEY),
-      TcBUTTON(PIN_BTN_SETUP_MODE) }
+    { Button(PIN_BTN_MASTER_KEY),
+      Button(PIN_BTN_SETUP_MODE) }
   };
 }
 
