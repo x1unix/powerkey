@@ -8,6 +8,7 @@
 
 class NoOpSaga : public Saga {
   void enter(BoardState& state) override {
+    wipePasswd();
     digitalWrite(PIN_LED_SETUP, HIGH);
   }
   void leave(BoardState& state) override {}

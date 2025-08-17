@@ -16,13 +16,26 @@ void setupPins() {
   pinMode(PIN_BTN_MASTER_KEY, INPUT_PULLUP);
 }
 
+bool isMagicPresent() {
+  uint16_t val = 0;
+  EEPROM.get(EEPROM_MAGIC_OFFSET, val);
+  return val == EEPROM_MAGIC;
+}
+
 uint16_t getPasswdLen() {
+  if (!isMagicPresent()) {
+    return 0;
+  }
+
   uint16_t val = 0;
   EEPROM.get(EEPROM_PASSWD_LEN_OFFSET, val);
   return val;
 }
 
 void savePasswd(uint16_t len, char* data) {
+  // Write magic
+  EEPROM.put(EEPROM_MAGIC_OFFSET, EEPROM_MAGIC);
+
   // Commit len
   EEPROM.put(EEPROM_PASSWD_LEN_OFFSET, len);
 
@@ -38,5 +51,11 @@ void readPasswdStr(uint16_t len, char* dst) {
 
   for (uint8_t i = 0; i < len; i++) {
     dst[i] = EEPROM.read(EEPROM_PASSWD_DATA_OFFSET + i);
+  }
+}
+
+void wipePasswd() {
+  for (uint8_t i = EEPROM_PASSWD_OFFSET; i < EEPROM_PASSWD_DATA_OFFSET + 1; i++) {
+    EEPROM.write(i, 0xFF);
   }
 }
