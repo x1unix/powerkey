@@ -10,6 +10,10 @@
 #error "ANALOG_MAX: Unsupported board"
 #endif
 
+// Uncomment this to enable debug logging
+//#define DEBUG
+#define DEBUG
+
 // Maximum password length in ASCII chars.
 //
 // Depends on EEPROM capacity of a board.

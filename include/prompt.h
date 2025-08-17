@@ -19,6 +19,14 @@ enum PromptReadStage {
   FINISH = 3,
 };
 
+/**
+ * PromptReader reads a new password string from serial input.
+ *
+ * Expected string should look like:
+ *  "<len>\n<value>"
+ * For example:
+ *  "5\nhello"
+ */
 class PromptReader {
 private:
   PromptReadStage m_stage;
@@ -36,8 +44,24 @@ private:
 public:
   PromptReader(uint16_t maxLen);
   ~PromptReader();
+
+  /**
+   * Resets a reader.
+   */
   void reset();
-  bool readPassword();
+
+  /**
+   * Try to read a an input from Serial.
+   *
+   * Returns false on finish.
+   */
+  bool read();
+
+  /**
+   * Returns collected result.
+   *
+   * Returns a zero-length result on error.
+   */
   PromptResult getResult();
 };
 

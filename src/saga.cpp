@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "logger.h"
 #include "config.h"
 #include "utils.h"
 #include "state.h"
@@ -71,19 +72,24 @@ private:
       return ActionType::EMPTY;
     }
 
-    if (!m_reader.readPassword()) {
+    if (m_reader.read()) {
+      // Consume input and continue.
       return ActionType::EMPTY;
     }
 
     auto result = m_reader.getResult();
     if (result.len == 0) {
+      DEBUG_LOG("No password");
       return state.prevAction == ActionType::BOOT ? ActionType::EMPTY : state.prevAction;
     }
 
+#ifdef DEBUG
     Serial.print("Received: len=");
     Serial.print(result.len);
     Serial.print("; data=");
-    Serial.println(result.data);
+    Serial.write(result.data, result.len);
+    Serial.println();
+#endif
 
     savePasswd(result.len, result.data);
     state.pwdLen = result.len;
@@ -203,8 +209,7 @@ Saga* nextSaga(ActionType action, BoardState& state, Saga* prevSaga) {
     prevSaga = nullptr;
   }
 
-  Serial.print("nextSaga: ");
-  Serial.println(action);
+  DEBUG_LOG("nextSaga: ", action);
   Saga* nextSaga = sagaFromActionType(action);
   nextSaga->enter(state);
   return nextSaga;

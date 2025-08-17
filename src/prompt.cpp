@@ -1,10 +1,21 @@
+#include "config.h"
 #include "prompt.h"
-#include "USBAPI.h"
+
+bool isBreakChar(uint8_t b) {
+  switch (b) {
+    case '\r':
+    case '\n':
+      return true;
+    default:
+      break;
+  }
+  return false;
+}
 
 PromptReader::PromptReader(uint16_t maxLen) {
   this->m_cap = 0;
-  this->m_len = maxLen;
   this->m_len = 0;
+  this->m_maxLen = maxLen;
   this->m_stage = PromptReadStage::ZERO;
   this->m_data = nullptr;
 }
@@ -24,7 +35,9 @@ void PromptReader::reset() {
 
 bool PromptReader::onInit() {
   if (Serial) {
-    Serial.println("NEW PASSWD?");
+    Serial.print("NEW PASSWD? (maxlen: ");
+    Serial.print(m_maxLen);
+    Serial.println(")");
     m_stage = PromptReadStage::WAIT_LEN;
   }
 
@@ -47,7 +60,7 @@ bool PromptReader::readLenChar(uint8_t ch) {
     return false;  // Overflow on addition
   }
 
-  uint16_t newNum = digit * 10 + m_cap;
+  uint16_t newNum = digit + m_cap * 10;
   m_cap = newNum;
   return true;
 }
@@ -61,20 +74,24 @@ bool PromptReader::tryReadLen() {
   for (int i = 0; i < avail; i++) {
     if (m_cap > m_maxLen) {
       Serial.println("Err: cap");
+      reset();
       return false;
     }
 
     uint8_t b = Serial.read();
-    if (b == '\n') {
+    if (isBreakChar(b)) {
       if (m_cap == 0) {
+        Serial.println("ERR: Empty cap");
         reset();
         return false;
       }
 
       // Stop read size
+      Serial.print("OK: len=");
+      Serial.println(m_cap);
       m_data = new char[m_cap];
       m_stage = PromptReadStage::WAIT_STR;
-      break;
+      return true;
     }
 
     if (!readLenChar(b)) {
@@ -107,7 +124,18 @@ bool PromptReader::tryReadChar() {
 
   for (int i = 0; i < avail; i++) {
     uint8_t b = Serial.read();
-    if (b == '\n') {
+    if (isBreakChar(b)) {
+      if (m_len == 0) {
+        // HACK: handle double escape sequence if running from a terminal.
+        continue;
+      }
+
+#ifdef DEBUG
+      Serial.print("OK: val=");
+      Serial.write(m_data, m_len);
+      Serial.println();
+#endif
+
       m_stage = PromptReadStage::FINISH;
       return false;
     }
@@ -121,7 +149,7 @@ bool PromptReader::tryReadChar() {
   return true;
 }
 
-bool PromptReader::readPassword() {
+bool PromptReader::read() {
   switch (m_stage) {
     case PromptReadStage::ZERO:
       return onInit();
