@@ -6,7 +6,7 @@
 bool isBoardDisabled() {
   pinMode(PIN_GUARD, INPUT_PULLUP);
   int val = digitalRead(PIN_GUARD);
-  return val == LOW;
+  return val == HIGH;
 }
 
 void setupPins() {
