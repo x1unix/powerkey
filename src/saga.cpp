@@ -32,7 +32,7 @@ class BootSaga : public Saga {
   }
 
   ActionType tick(BoardState& state) override {
-    if (!state.isDisabled) {
+    if (state.isDisabled) {
       return ActionType::DISABLE_BOARD;
     }
 
