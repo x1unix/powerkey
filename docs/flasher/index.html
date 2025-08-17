@@ -15,11 +15,23 @@
           <span class="power">Power</span><span class="key">Key</span><span> Programmer</span>
         </div>
       </header>
-      <div class="content" id="content-start" hidden>
+      <div class="content" id="stage-start">
+        <div>
+          <img src="favicon.png" height="64" />
+        </div>
         <p class="descr">Press a reset button on your PowerKey and click <kbd>"Start"</kbd> when ready</p>
-        <button type="button" class="btn">Start</button>
+        <button type="button" id="btnStart" class="btn">Start</button>
       </div>
-      <div class="content" id="content-prompt">
+      <div class="content hidden" id="stage-progress">
+        <p class="descr" id="progressTitle">Waiting for a keyboard...</p>
+        <p>
+        <div class="spinner"></div>
+        </p>
+        <p>
+          <button class="btn" id="btnCancel" type="button">Cancel</button>
+        </p>
+      </div>
+      <div class="content hidden" id="stage-prompt">
         <p class="descr">Enter a new password to remember and press <kbd>Enter</kbd></p>
         <form id="pwdForm">
           <p>
@@ -30,6 +42,14 @@
           </p>
         </form>
       </div>
+      <div class="content hidden" id="stage-error">
+        <span class="icon-error">&times;</span>
+        <p class="descr" id="errMessage">This browser is not supported</p>
+      </div>
+      <div class="content hidden" id="stage-finish">
+        <p class="descr">Success!</p>
+      </div>
     </div>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -1,23 +1,18 @@
 html {
+  --color-body: #000080;
   --color-bg0: #8d8d8d;
   --color-bg1: #ccc;
   --color-bg2: #fff;
   --color-fg-primary: #000;
   --color-border: #333;
+  --color-highlight: #ffff00;
+  --color-bar: #000088;
+  --color-danger-muted: #800000;
+  --shadow-distance: 15px;
 }
 
-[hidden] {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    --color-bg0: #000;
-    --color-bg1: #222;
-    --color-bg2: #666;
-    --color-fg-primary: #ccc;
-    --color-border: #444;
-  }
+.hidden, [hidden] {
+  display: none !important;
 }
 
 @font-face {
@@ -35,8 +30,8 @@ html {
 }
 
 body {
-  background: var(--color-bg0);
   color: var(--color-fg-primary);
+  background: var(--color-body);
   font: 12pt FixedsysExcelsior, monospace;
   font-display: swap;
   font-smooth: never;
@@ -50,10 +45,14 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  padding: 18pt 8pt;
+  background: var(--color-bg0);
+  box-shadow: var(--shadow-distance) var(--shadow-distance) 0 #000;
 }
 
 .container kbd {
-  color: #0000ff;
+  color: var(--color-highlight);
   font: inherit;
   font-display: swap;
   font-smooth: never;
@@ -70,6 +69,47 @@ body {
   border-radius: 0;
   border: 2px solid var(--color-border);
   padding: 2pt 4pt;
+  cursor: pointer;
+}
+
+.btn:active {
+  border-color: var(--color-bg2);
+}
+
+@keyframes slide {
+  0% {
+    left: 0; /* Start off-screen left */
+  }
+  50% {
+    left: 75%; /* Move to off-screen right */
+  }
+  100% {
+    left: 0; /* Return to off-screen left */
+  }
+}
+
+.spinner {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg1);
+  color: var(--color-fg-primary);
+  border-radius: 0;
+  border: 2px solid var(--color-border);
+  padding: 2px;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.spinner:before {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 24px;
+  width: 25%;
+  background: var(--color-bar);
+  left: 0;
+  animation: slide 3s steps(20) infinite;
 }
 
 .input {
@@ -95,7 +135,7 @@ body {
   padding: 32px;
 }
 
-.container .title {
+.header .title {
    font-size: 32pt;
 }
 
@@ -109,8 +149,33 @@ body {
 
 .content {
   text-align: center;
+  margin-top: 10pt;
 }
 
 .content .descr {
   margin: 18pt 0;
 }
+
+.icon-error {
+  display: inline-block;
+  margin: 0 auto;
+  position: relative;
+  padding: 4px;
+  font-size: 48pt;
+  color: #fff;
+}
+
+.icon-error:before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  display: block;
+  height: 48pt;
+  width: 48pt;
+  background: var(--color-danger-muted);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
