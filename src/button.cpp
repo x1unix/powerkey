@@ -3,8 +3,12 @@
 
 Button::Button(uint8_t pin) : Button(pin, 100) {}
 Button::Button(uint8_t pin, unsigned long debounceInterval) {
+  m_state = false;
+  m_prevState = false;
+  m_prevMillis = 0;
   m_pin = pin;
   m_debounceInterval = debounceInterval;
+  pinMode(pin, INPUT_PULLUP);
 }
 
 void Button::update() {
@@ -16,15 +20,18 @@ void Button::update() {
 
   m_prevMillis = now;
   auto current = digitalRead(m_pin) == LOW;
-  if (current != m_state) {
-    m_prevState = m_state;
-    m_state = current;
-  }
+  m_prevState = m_state;
+  m_state = current;
 }
 
 bool Button::isActivated() {
   update();
-  return m_prevState && !m_state;
+  bool wasActivated = m_prevState && !m_state;
+  if (wasActivated) {
+    m_prevState = false;
+  }
+
+  return wasActivated;
 }
 
 bool Button::isKeyDown() {
