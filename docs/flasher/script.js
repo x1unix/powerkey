@@ -61,6 +61,8 @@ const state = {
   isWriting: false
 };
 
+const delay = async (n) => await new Promise((resolve) => setTimeout(resolve, n));
+
 function setErrorMsg(msg) {
   errMsg.innerText = msg;
   setScene(scenes.error);
@@ -200,6 +202,7 @@ async function writePassword(value) {
       throw new Error(`Device acknowledged password length doesn't match (want: ${value.length}, got: ${val})`);
     }
 
+    await delay(500);
     setScene(scenes.finish);
     setTimeout(() => setScene(scenes.start), 3000);
   } finally {

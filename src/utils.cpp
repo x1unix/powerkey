@@ -1,3 +1,4 @@
+#include <avr/wdt.h>
 #include <Arduino.h>
 #include <EEPROM.h>
 #include "config.h"
@@ -60,4 +61,18 @@ void wipePasswd() {
   for (uint16_t i = EEPROM_PASSWD_OFFSET; i < EEPROM_PASSWD_DATA_OFFSET + 1; i++) {
     EEPROM.update(i, 0xFF);
   }
+}
+
+void reset() {
+#if defined(__AVR__)
+  wdt_disable();
+  wdt_enable(WDTO_15MS);
+  while (1) {}
+#elif defined(ESP32) || defined(ESP8266)
+  ESP.restart();
+#else
+  // Fallback for other architectures
+  void (*resetFunc)(void) = 0;
+  resetFunc();
+#endif
 }

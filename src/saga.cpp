@@ -55,6 +55,7 @@ private:
   PromptReader m_reader;
   unsigned long m_prevMillis = 0;
   bool m_ledEnabled = false;
+  bool m_changed = false;
 
   void updateLedState(bool state) {
     m_prevMillis = millis();
@@ -95,6 +96,7 @@ private:
     Serial.println();
 #endif
 
+    m_changed = true;
     savePasswd(result.len, result.data);
     state.pwdLen = result.len;
     if (state.pwdData != nullptr) {
@@ -108,11 +110,21 @@ public:
   void enter(BoardState& state) override {
     Serial.begin(9600);
     updateLedState(true);
+    m_changed = true;
     m_reader.reset();
   }
 
   void leave(BoardState& state) override {
+    Serial.flush();
     Serial.end();
+
+    if (m_changed) {
+      // HACK: for some reason, board stuck in indeterminate state after a couple of sequential setup cycles.
+      // Rebooting device helps.
+      delay(250);
+      reset();
+    }
+
     m_reader.reset();
     digitalWrite(PIN_LED_SETUP, LOW);
   }
