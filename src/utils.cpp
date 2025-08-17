@@ -49,7 +49,7 @@ void readPasswdStr(uint16_t len, char* dst) {
     return;
   }
 
-  for (uint8_t i = 0; i < len; i++) {
+  for (uint16_t i = 0; i < len; i++) {
     dst[i] = EEPROM.read(EEPROM_PASSWD_DATA_OFFSET + i);
   }
 }
