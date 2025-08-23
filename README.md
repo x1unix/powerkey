@@ -13,7 +13,7 @@ PowerKey is a simple single-key device which acts as a USB-keyboard and automati
 
 ### Ingredients
 
-* 1x Arduino Pro Micro
+* 1x [Arduino Pro Micro](https://www.sparkfun.com/pro-micro-3-3v-8mhz.html)
 * 2x LEDs + 220Ω resistors
 * 1x Cherry MX or another switch
 * 1x Button
