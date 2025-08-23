@@ -22,14 +22,14 @@ PowerKey is a simple single-key device which acts as a USB-keyboard and automati
 > [!NOTE]
 > See [include/config.h](include/config.h) for pinout config.
 
-## Firmware
+### Firmware
 
 Use `make build` and `make upload` to flash a board.
 
 > [!IMPORTANT]
 > PlatformIO is required to build the project. Install [PlatformIO CLI](https://docs.platformio.org/en/latest/core/index.html) or [VSCode extension](https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide).
 
-## Housing
+### Housing
 
 You can find a Fusion 360 project [here](./docs/3d-print/PowerKeyCase.f3d).
 
