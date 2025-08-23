@@ -33,6 +33,8 @@ Use `make build` and `make upload` to flash a board.
 
 You can find a Fusion 360 project [here](./docs/3d-print/PowerKeyCase.f3d).
 
+Final STL file is available [here](./docs/3d-print/PowerKeyCase.stl).
+
 ## Configuration
 
 ### Firmware
