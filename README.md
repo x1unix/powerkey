@@ -17,7 +17,7 @@ PowerKey is a simple single-key device which acts as a USB-keyboard and automati
 * 2x LEDs + 220Ω resistors
 * 1x Cherry MX or another switch
 * 1x Button
-* 3D Printer (optionally, to print [housing](./docs/3d-print/PowerKeyCase.f3d))
+* 3D Printer (optionally, to print [housing](./docs/3d-print/PowerKeyCase.stl))
 
 > [!NOTE]
 > See [include/config.h](include/config.h) for pinout config.
